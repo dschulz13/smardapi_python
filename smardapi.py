@@ -97,7 +97,7 @@ def get_ts_data(filter, region, resolution, start = '2015-01-01 00:00', stop = N
     return df
 
 
-class smardapi:
+class SmardApi:
     data = None
     
     def __init__(self, filter = None, region = None):
