@@ -6,12 +6,14 @@ Created on Thu Sep 10 10:56:50 2026
 
 # Script for SMARD API access
 
+## Import needed modules
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import requests
 import pandas as pd
 import numpy as np
 
+# Given a URL, run an API call and return the data
 def run_api(url):
     try:
         response = requests.get(url, timeout = 30)
@@ -23,12 +25,14 @@ def run_api(url):
         print("Error: The response server did not return valid JSON.")
     return data
 
+## Constructor function for the timestamp API URL
 def construct_timestamp_url(filter, region, resolution):
     base_url = 'https://www.smard.de/app'
     extension = '/chart_data/' + str(filter) + '/' + region + \
         '/index_' + resolution + '.json'
     return base_url + extension
 
+## Function to retrieve timestamps from SMARD API
 def get_timestamps(filter, region, resolution):
     url = construct_timestamp_url(
         filter = filter,
@@ -37,6 +41,8 @@ def get_timestamps(filter, region, resolution):
         )
     return run_api(url)['timestamps']
 
+## Constructor function for the data API URL given starting time
+## stamps for the data packages
 def construct_data_url(filter, region, resolution, timestamps):
     base_url = 'https://www.smard.de/app'
     filter_str = str(filter)
@@ -47,6 +53,7 @@ def construct_data_url(filter, region, resolution, timestamps):
 
     return [entire_base_url + timestamp + '.json' for timestamp in [str(ts) for ts in timestamps]]
 
+## Filter timestamps given a starting and a stopping time point
 def filter_timestamps(timestamps, start = '2015-01-01 00:00', stop = None):
     # Timestamps in seconds since 1970-01-01
     timestamps_np = np.array(timestamps) / 1000
@@ -59,24 +66,24 @@ def filter_timestamps(timestamps, start = '2015-01-01 00:00', stop = None):
     stop_idx = max(np.sum(stop_int >= timestamps_np).item(), 1)
     return timestamps[start_idx:stop_idx]
 
-
+## Function to retrieve and format data from the SMARD API
 def get_ts_data(filter, region, resolution, start = '2015-01-01 00:00', stop = None):
-    tstamps = filter_timestamps(
-        get_timestamps(
+    tstamps = filter_timestamps(    # Filter time stamps by start and stop timestamps
+        get_timestamps(             # Retrieve available timestamps for data packages
             filter = filter,
             region = region,
             resolution = resolution
             ),
         start = start, stop = stop
         )
-    data_urls = construct_data_url(
+    data_urls = construct_data_url(    # Get API URLs for relevant data packages
         filter = filter,
         region = region,
         resolution = resolution,
         timestamps = tstamps)
-    data_collection = []
+    data_collection = []   # Initialize empty list
     print('Downloading data...')
-    for url in data_urls:
+    for url in data_urls:   # For each URL, collect the data and append it to the list
         data_collection.append(run_api(url)['series'])
     print('Download successful!')
     combined_list = [subsublist for sublist in data_collection for subsublist in sublist]
@@ -96,20 +103,28 @@ def get_ts_data(filter, region, resolution, start = '2015-01-01 00:00', stop = N
     return df
 
 
+## Main object class to specify API settings, download data,
+## plot data, and save data
 class SmardApi:
     data = None
     
     def __init__(self, filter = None, region = None):
         self.specification = {"filter": filter, "region": region}
+        return self
     def specify(self, filter, region):
         self.specification = {"filter": filter, "region": region}
+        return self
     def download(self, resolution, start = '2015-01-01', stop = None):
+        if (self.data is None):
+            print('Firstly, use .specify() to specify filter and region settings.')
+            return
         self.data = get_ts_data(
             filter = self.specification['filter'],
             region = self.specification['region'],
             resolution = resolution,
             start = start,
             stop = stop)
+        return self
     def plot(self):
         if (self.data is None):
             print('No data found.')
