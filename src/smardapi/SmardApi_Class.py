@@ -175,10 +175,10 @@ class SmardApi:
 
         Parameters
         ----------
-        filter_no : int
-            The filter number specifying the type of series
-        region : str
-            The region to get the data for
+            filter_no : int
+                The filter number specifying the type of series
+            region : str
+                The region to get the data for
 
         Returns
         -------
@@ -198,17 +198,17 @@ class SmardApi:
 
         Parameters
         ----------
-        resolution : str
-            The resolution of the time series, i.e. the time between
-            observations
-        start : str
-            The starting time point following the ISO8601 format
-        stop : str
-            The stopping time point following the ISO8601 format;
-            the default None gets data until the last available time point
-        silent : bool
-            A boolean indicating whether or not to suppress messages
-            from the download method to the console
+            resolution : str
+                The resolution of the time series, i.e. the time between
+                observations
+            start : str
+                The starting time point following the ISO8601 format
+            stop : str
+                The stopping time point following the ISO8601 format;
+                the default None gets data until the last available time point
+            silent : bool
+                A boolean indicating whether or not to suppress messages
+                from the download method to the console
 
         Returns
         -------
@@ -241,10 +241,10 @@ class SmardApi:
 
         Parameters
         ----------
-        *args:
-            Further positional arguments to pass to pd.DataFrame.plot()
-        **kwargs:
-            Further keyword arguments to pass to pd.DataFrame.plot()
+            *args:
+                Further positional arguments to pass to pd.DataFrame.plot()
+            **kwargs:
+                Further keyword arguments to pass to pd.DataFrame.plot()
 
         Returns
         -------
@@ -278,9 +278,9 @@ class SmardApi:
 
         Parameters
         ----------
-        file : str
-            The path and filename (with file ending) specifying
-            where and under what name to save the data
+            file : str
+                The path and filename (with file ending) specifying
+                where and under what name to save the data
 
         Returns
         -------
