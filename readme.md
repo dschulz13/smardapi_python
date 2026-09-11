@@ -5,7 +5,10 @@ This is a Python package for specifying, downloading, plotting and saving time s
 ## Installation
 
 Install the latest package version from GitHub via entering the following in the terminal:
-pip install git+https://github.com/dschulz13/smardapi_python.git
+
+
+```pip install git+https://github.com/dschulz13/smardapi_python.git```
+
 ## Example
 
 Firstly, import the module under a self-selected name. This is already a working instance of the class "SmardApi".
@@ -125,7 +128,10 @@ smard.plot()
 The `.plot()` method may contain any further positional or keyword arguments from `pandas.DataFrame.plot()`.
 
 The data frame in `smard.data` may also be saved locally to your device using `smard.save_csv()`.
-smard.save_csv(file = "NewData.csv")
+
+
+```smard.save_csv(file = "NewData.csv")```
+
 ## Contact
 
 Issues can be stated at https://github.com/dschulz13/smardapi_python/issues. Otherwise, please feel free to reach out via dominik.schulz.r@gmail.com.
