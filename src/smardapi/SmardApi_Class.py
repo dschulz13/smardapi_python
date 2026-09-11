@@ -140,26 +140,28 @@ class SmardApi:
     """
     Help on the SmardApi class from module smardapi.
 
-    Attributes:
-    -----------
-        data             The downloaded data. Is None before a call to .download().
-        specification    A dictionary giving filter number and region specifications.
-                         Both are None before a call to .specify().
+    Attributes
+    ----------
+    data : pd.DataFrame or None
+        The downloaded data. Is None before a call to .download().
+    specification : dict or None
+        A dictionary giving filter number and region specifications.
+        Both are None before a call to .specify().
 
-    Purpose:
+    Purpose
+    -------
+    Specify, download, plot and save data from the SMARD API of
+    the German Federal Network Agency. This is data on electricity
+    production, consumption and prices and various resolution
+    levels.
+
+    Examples
     --------
-        Specify, download, plot and save data from the SMARD API of
-        the German Federal Network Agency. This is data on electricity
-        production, consumption and prices and various resolution
-        levels.
-
-    Example call:
-    -------------
-        SmardApi()
+    SmardApi()
 
     Returns:
     --------
-        An object of class SmardApi.
+    An object of class SmardApi.
     """
 
     def __init__(self):
@@ -171,20 +173,22 @@ class SmardApi:
         Specify the time series type (called the filter number) and
         the region for the SMARD API
 
-        Parameters:
-        -----------
-            filter_no (int): The filter number specifying the type of series
-            region (str):    The region to get the data for
+        Parameters
+        ----------
+        filter_no : int
+            The filter number specifying the type of series
+        region : str
+            The region to get the data for
 
-        Returns:
-        --------
-            Nothing, but it updates the element .specification with
-            the provided information.
+        Returns
+        -------
+        Nothing, but it updates the element .specification with
+        the provided information.
 
-        Example:
+        Examples
         --------
-            import smardapi as smard
-            smard.specify(filter_no = 410, region = 'DE')
+        import smardapi as smard
+        smard.specify(filter_no = 410, region = 'DE')
         """
         self.specification = {"filter_no": filter_no, "region": region}
 
@@ -192,29 +196,33 @@ class SmardApi:
         """
         Download the time series specified in .specification
 
-        Parameters:
-        -----------
-            resolution (str): The resolution of the time series, i.e. the time between
-                              observations
-            start (str):      The starting time point following the ISO8601 format
-            stop (str):       The stopping time point following the ISO8601 format;
-                              the default None gets data until the last available time point
-            silent (bool):    A boolean indicating whether or not to suppress messages
-                              from the download method to the console
+        Parameters
+        ----------
+        resolution : str
+            The resolution of the time series, i.e. the time between
+            observations
+        start : str
+            The starting time point following the ISO8601 format
+        stop : str
+            The stopping time point following the ISO8601 format;
+            the default None gets data until the last available time point
+        silent : bool
+            A boolean indicating whether or not to suppress messages
+            from the download method to the console
 
-        Returns:
-        --------
-            Nothing, but it downloads the data via the SMARD API and
-            updates the element .data to then contain a pd.DataFrame
-            with the downloaded data. If .specify() has not been run
-            at least once before, this method will simply print
-            a message to the console and do nothing otherwise.
+        Returns
+        -------
+        Nothing, but it downloads the data via the SMARD API and
+        updates the element .data to then contain a pd.DataFrame
+        with the downloaded data. If .specify() has not been run
+        at least once before, this method will simply print
+        a message to the console and do nothing otherwise.
 
-        Example:
+        Examples
         --------
-            import smardapi as smard
-            smard.specify(filter_no = 410, region = 'DE')
-            smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
+        import smardapi as smard
+        smard.specify(filter_no = 410, region = 'DE')
+        smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
         """
         if (self.data is None):
             print('Firstly, use .specify() to specify filter_no and region settings.')
@@ -231,25 +239,25 @@ class SmardApi:
         """
         Plot the data in .data as a time series plot
 
-        Parameters:
-        -----------
-            *args:    Further positional arguments to pass to
-                      pd.DataFrame.plot()
-            **kwargs: Further keyword arguments to pass to
-                      pd.DataFrame.plot()
+        Parameters
+        ----------
+        *args:
+            Further positional arguments to pass to pd.DataFrame.plot()
+        **kwargs:
+            Further keyword arguments to pass to pd.DataFrame.plot()
 
-        Returns:
-        --------
-            Returns an Axis object. If .download() has not been
-            run at least once before, this method just prints
-            a message to the console and returns None.
+        Returns
+        -------
+        Returns an Axis object. If .download() has not been
+        run at least once before, this method just prints
+        a message to the console and returns None.
 
-        Example:
+        Examples
         --------
-            import smardapi as smard
-            smard.specify(filter_no = 410, region = 'DE')
-            smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
-            smard.plot()
+        import smardapi as smard
+        smard.specify(filter_no = 410, region = 'DE')
+        smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
+        smard.plot()
         """
         if (self.data is None):
             print('No data found.')
@@ -268,23 +276,24 @@ class SmardApi:
         """
         Save the data in .data as a CSV file
 
-        Parameters:
-        -----------
-            file (str): The path and filename (with file ending) specifying
-                        where and under what name to save the data
+        Parameters
+        ----------
+        file : str
+            The path and filename (with file ending) specifying
+            where and under what name to save the data
 
-        Returns:
-        --------
-            Returns nothing but saves a CSV file to the specified path.
-            If .download() has not been called at least once before, this
-            method prints a message to the console.
+        Returns
+        -------
+        Returns nothing but saves a CSV file to the specified path.
+        If .download() has not been called at least once before, this
+        method prints a message to the console.
 
-        Example:
+        Examples
         --------
-            import smardapi as smard
-            smard.specify(filter_no = 410, region = 'DE')
-            smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
-            smard.save_csv(file = 'NewData.csv')
+        import smardapi as smard
+        smard.specify(filter_no = 410, region = 'DE')
+        smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
+        smard.save_csv(file = 'NewData.csv')
         """
         if (self.data is None):
             print('No data found.')
@@ -297,20 +306,20 @@ class SmardApi:
         """
         Get a dictionary of allowed filter numbers with explanations
 
-        Parameters:
-        -----------
-            No parameters
+        Parameters
+        ----------
+        No parameters
 
-        Returns:
-        --------
-            Returns a dictionary, whose values are the allowed filter numbers
-            for filter_no in .specify(). The names of these values give an
-            explanation what the numbers stand for.
+        Returns
+        -------
+        Returns a dictionary, whose values are the allowed filter numbers
+        for filter_no in .specify(). The names of these values give an
+        explanation what the numbers stand for.
 
-        Example:
+        Examples
         --------
-            import smardapi as smard
-            smard.allowed_filter_no()
+        import smardapi as smard
+        smard.allowed_filter_no()
         """
         print('Check https://smard.api.bund.dev/ for details')
         return {
@@ -356,20 +365,20 @@ class SmardApi:
         """
         Get a dictionary of allowed region settings with explanations
 
-        Parameters:
-        -----------
-            No parameters
+        Parameters
+        ----------
+        No parameters
 
-        Returns:
-        --------
-            Returns a dictionary, whose values are the allowed strings
-            for region settings for region in .specify(). The names of
-            these values give an explanation what the settings stand for.
+        Returns
+        -------
+        Returns a dictionary, whose values are the allowed strings
+        for region settings for region in .specify(). The names of
+        these values give an explanation what the settings stand for.
 
-        Example:
+        Examples
         --------
-            import smardapi as smard
-            smard.allowed_region()
+        import smardapi as smard
+        smard.allowed_region()
         """
         print('Check https://smard.api.bund.dev/ for details')
         return {
@@ -389,20 +398,20 @@ class SmardApi:
         """
         Get a dictionary of allowed resolution settings with explanations
 
-        Parameters:
-        -----------
-            No parameters
+        Parameters
+        ----------
+        No parameters
 
-        Returns:
-        --------
-            Returns a dictionary, whose values are the allowed resolution
-            strings for resolution in .download(). The names of these values
-            give an explanation what the settings stand for.
+        Returns
+        -------
+        Returns a dictionary, whose values are the allowed resolution
+        strings for resolution in .download(). The names of these values
+        give an explanation what the settings stand for.
 
-        Example:
+        Examples
         --------
-            import smardapi as smard
-            smard.allowed_resolution()
+        import smardapi as smard
+        smard.allowed_resolution()
         """
         print('Check https://smard.api.bund.dev/ for details')
         return {
