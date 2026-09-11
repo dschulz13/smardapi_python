@@ -87,9 +87,6 @@ def construct_data_url(filter_no, region, resolution, timestamps):
 def filter_timestamps(timestamps, start = '2015-01-01 00:00', stop = None):
     # Timestamps in seconds since 1970-01-01
     timestamps_np = np.array(timestamps) / 1000
-    # For default of stop, get current datetime in Berlin
-    if stop is None:
-        stop = datetime.now(ZoneInfo("Europe/Berlin")).strftime('%Y-%m-%d %H:%M')
     start_int = int(pd.to_datetime(start, format = 'ISO8601').timestamp())
     stop_int = int(pd.to_datetime(stop, format = 'ISO8601').timestamp())
     start_idx = max(np.sum(start_int >= timestamps_np).item() - 1, 0)
@@ -98,6 +95,8 @@ def filter_timestamps(timestamps, start = '2015-01-01 00:00', stop = None):
 
 ## Function to retrieve and format data from the SMARD API
 def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop = None, silent = False):
+    if stop is None:
+        stop = datetime.now(ZoneInfo("Europe/Berlin")).strftime('%Y-%m-%d %H:%M')
     tstamps = filter_timestamps(    # Filter time stamps by start and stop timestamps
         get_timestamps(             # Retrieve available timestamps for data packages
             filter_no = filter_no,
@@ -111,10 +110,10 @@ def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop 
         region = region,
         resolution = resolution,
         timestamps = tstamps)
-    if ~silent:
+    if not silent:
         print('Downloading data...')
     data_collection = [run_api(url)['series'] for url in data_urls]
-    if ~silent:
+    if not silent:
         print('Download successful!')
     df = pd.DataFrame({
         'Timestamp': [datetime.fromtimestamp(int(subsublist[0] / 1000), tz = ZoneInfo("Europe/Berlin")) \
@@ -122,15 +121,22 @@ def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop 
         'Value': [subsublist[1] for sublist in data_collection for subsublist in sublist]
         })
     df.drop_duplicates(subset = ['Timestamp'], ignore_index = True, inplace = True)
+    df = df.iloc[lambda x: (x['Timestamp'] >= datetime.fromisoformat(start).replace(tzinfo = ZoneInfo("Europe/Berlin"))) & (x['Timestamp'] <= datetime.fromisoformat(stop).replace(tzinfo = ZoneInfo("Europe/Berlin"))), :]
     df = df.loc[df['Value'].first_valid_index():df['Value'].last_valid_index()].reset_index(drop = True)
     #df.set_index('Timestamp', inplace = True)
-    if ~silent:
+    if not silent:
         if df['Value'].isna().any().item():
             print('There are NaN values in the series! Check this thoroughly!')
         else:
             print('There are no NaN values in the series!')
     return df
 
+def is_iso8601(date_string: str):
+    try:
+        datetime.fromisoformat(date_string)
+        return True
+    except ValueError:
+        return False
 
 ## Main object class to specify API settings, download data,
 ## plot data, and save data
@@ -190,6 +196,19 @@ class SmardApi:
             import smardapi as smard
             smard.specify(filter_no = 410, region = 'DE')
         """
+
+        if not isinstance(filter_no, int) or isinstance(filter_no, bool):
+            raise TypeError('filter_no must be an integer.')
+        if not filter_no in [1223, 1224, 1225, 1226, 1227, 1228, 4066, 4067, 
+        4068, 4069, 4070, 4071, 410, 4359, 4387, 4169, 5078, 4996, 4997, 4170, 
+        252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 3791, 123, 125,
+        715, 5097, 122]:
+            raise ValueError('filter_no is not one of the allowed int values. Check .allowed_filter_no().')
+        if not isinstance(region, str):
+            raise TypeError('region must be a string.')
+        if not region in ["DE", "AT", "LU", "DE-LU", "DE-AT-LU", "50Hertz",
+        "Amprion", "TenneT", "TransnetBW", "APG", "Creos"]:
+            raise ValueError('region is not one of the allowed str values. Check .allowed_region().')
         self.specification = {"filter_no": filter_no, "region": region}
 
     def download(self, resolution, start = '2015-01-01', stop = None, silent = False):
@@ -227,6 +246,20 @@ class SmardApi:
         if (self.data is None):
             print('Firstly, use .specify() to specify filter_no and region settings.')
         else:
+            if not isinstance(resolution, str):
+                raise TypeError('resolution must be a string.')
+            if not resolution in ['quarterhour', 'hour', 'day', 'week', 'month',
+            'year']:
+                raise ValueError('resolution is not one of the allowed str values. Check .allowed_resolution().')
+            if not isinstance(start, str):
+                raise TypeError('start must be a string.')
+            if not is_iso8601(start):
+                raise ValueError('start must be a string of the ISO8601 format.')
+            if stop is not None and not isinstance(stop, str):
+                raise TypeError('stop must be either None or a string.')
+            if stop is not None and not is_iso8601(start):
+                raise ValueError('stop must be either None or a string of the ISO8601 format.')
+
             self.data = get_ts_data(
                 filter_no = self.specification['filter_no'],
                 region = self.specification['region'],
