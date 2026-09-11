@@ -1,5 +1,5 @@
 import sys
-from smardapi.functions_classes import SmardApi
+from smardapi.SmardApi_Class import SmardApi
 
 initialized_instance = SmardApi()
 
