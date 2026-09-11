@@ -97,7 +97,7 @@ def filter_timestamps(timestamps, start = '2015-01-01 00:00', stop = None):
     return timestamps[start_idx:stop_idx]
 
 ## Function to retrieve and format data from the SMARD API
-def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop = None):
+def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop = None, silent = False):
     tstamps = filter_timestamps(    # Filter time stamps by start and stop timestamps
         get_timestamps(             # Retrieve available timestamps for data packages
             filter_no = filter_no,
@@ -112,10 +112,12 @@ def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop 
         resolution = resolution,
         timestamps = tstamps)
     data_collection = []   # Initialize empty list
-    print('Downloading data...')
+    if ~silent:
+        print('Downloading data...')
     for url in data_urls:   # For each URL, collect the data and append it to the list
         data_collection.append(run_api(url)['series'])
-    print('Download successful!')
+    if ~silent:
+        print('Download successful!')
     df = pd.DataFrame({
         'Timestamp': [datetime.fromtimestamp(int(subsublist[0] / 1000), tz = ZoneInfo("Europe/Berlin")) \
             for sublist in data_collection for subsublist in sublist],
@@ -124,10 +126,11 @@ def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop 
     df.drop_duplicates(subset = ['Timestamp'], ignore_index = True, inplace = True)
     df = df.loc[df['Value'].first_valid_index():df['Value'].last_valid_index()].reset_index(drop = True)
     #df.set_index('Timestamp', inplace = True)
-    if df['Value'].isna().any().item():
-        print('There are NaN values in the series! Check this thoroughly!')
-    else:
-        print('There are no NaN values in the series!')
+    if ~silent:
+        if df['Value'].isna().any().item():
+            print('There are NaN values in the series! Check this thoroughly!')
+        else:
+            print('There are no NaN values in the series!')
     return df
 
 
@@ -187,7 +190,7 @@ class SmardApi:
         """
         self.specification = {"filter_no": filter_no, "region": region}
 
-    def download(self, resolution, start = '2015-01-01', stop = None):
+    def download(self, resolution, start = '2015-01-01', stop = None, silent = False):
         """
         Download the time series specified in .specification
 
@@ -198,6 +201,8 @@ class SmardApi:
             start (str):      The starting time point following the ISO8601 format
             stop (str):       The stopping time point following the ISO8601 format;
                               the default None gets data until the last available time point
+            silent (bool):    A boolean indicating whether or not to suppress messages
+                              from the download method to the console
 
         Returns:
         --------
@@ -221,7 +226,8 @@ class SmardApi:
                 region = self.specification['region'],
                 resolution = resolution,
                 start = start,
-                stop = stop)
+                stop = stop,
+                silent = silent)
         
     def plot(self, *args, **kwargs):
         """
