@@ -255,7 +255,7 @@ class SmardApi:
         else:
             sub_data = self.data
             sub_data = sub_data.set_index('Timestamp')
-            ax = sub_data.plot(legend = False)
+            ax = sub_data.plot(*args, **kwargs)
             xmin = sub_data.index.min()
             xmax = sub_data.index.max()
             delta = xmax - xmin
