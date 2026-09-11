@@ -1,0 +1,18 @@
+[project]
+name = "smardapi"
+version = "0.1.0"
+authors = [
+  { name="Dominik Schulz", email="dominik.schulz.r@gmail.com" },
+]
+description = "A package for downloading data from the SMARD API"
+readme = "README.md"
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "GPL-3"
+
+[project.urls]
+Homepage = "https://github.com/dschulz13/smardapi_python"
+Issues = "https://github.com/dschulz13/smardapi_python/issues"
