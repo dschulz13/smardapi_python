@@ -1,6 +1,6 @@
 import sys
-from smardapi.functions_classes import SmardAPI
+from smardapi.functions_classes import SmardApi
 
-initialized_instance = SmardAPI()
+initialized_instance = SmardApi()
 
 sys.modules[__name__] = initialized_instance
