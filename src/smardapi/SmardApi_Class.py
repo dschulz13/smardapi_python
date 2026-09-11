@@ -253,7 +253,7 @@ class SmardApi:
             print('No data found.')
             return None
         else:
-            sub_data = self.data
+            sub_data = self.data.copy()
             sub_data = sub_data.set_index('Timestamp')
             ax = sub_data.plot(*args, **kwargs)
             xmin = sub_data.index.min()
