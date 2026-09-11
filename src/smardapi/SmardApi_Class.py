@@ -116,12 +116,10 @@ def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop 
     for url in data_urls:   # For each URL, collect the data and append it to the list
         data_collection.append(run_api(url)['series'])
     print('Download successful!')
-    combined_list = [subsublist for sublist in data_collection for subsublist in sublist]
-    all_tstamps = [int(sublist[0] / 1000) for sublist in combined_list]
-    all_values = [sublist[1] for sublist in combined_list]
     df = pd.DataFrame({
-        'Timestamp': [datetime.fromtimestamp(tstamp, tz = ZoneInfo("Europe/Berlin")) for tstamp in all_tstamps],
-        'Value': all_values
+        'Timestamp': [datetime.fromtimestamp(int(subsublist[0] / 1000), tz = ZoneInfo("Europe/Berlin")) \
+            for sublist in data_collection for subsublist in sublist],
+        'Value': [subsublist[1] for sublist in data_collection for subsublist in sublist]
         })
     df.drop_duplicates(subset = ['Timestamp'], ignore_index = True, inplace = True)
     df = df.loc[df['Value'].first_valid_index():df['Value'].last_valid_index()].reset_index(drop = True)
