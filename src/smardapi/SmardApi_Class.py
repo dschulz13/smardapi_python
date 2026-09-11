@@ -142,11 +142,11 @@ class SmardApi:
 
     Attributes
     ----------
-    data : pd.DataFrame or None
-        The downloaded data. Is None before a call to .download().
-    specification : dict or None
-        A dictionary giving filter number and region specifications.
-        Both are None before a call to .specify().
+        data : pd.DataFrame or None
+            The downloaded data. Is None before a call to .download().
+        specification : dict or None
+            A dictionary giving filter number and region specifications.
+            Both are None before a call to .specify().
 
     Purpose
     -------
@@ -157,7 +157,7 @@ class SmardApi:
 
     Examples
     --------
-    SmardApi()
+        SmardApi()
 
     Returns:
     --------
@@ -187,8 +187,8 @@ class SmardApi:
 
         Examples
         --------
-        import smardapi as smard
-        smard.specify(filter_no = 410, region = 'DE')
+            import smardapi as smard
+            smard.specify(filter_no = 410, region = 'DE')
         """
         self.specification = {"filter_no": filter_no, "region": region}
 
@@ -220,9 +220,9 @@ class SmardApi:
 
         Examples
         --------
-        import smardapi as smard
-        smard.specify(filter_no = 410, region = 'DE')
-        smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
+            import smardapi as smard
+            smard.specify(filter_no = 410, region = 'DE')
+            smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
         """
         if (self.data is None):
             print('Firstly, use .specify() to specify filter_no and region settings.')
@@ -254,10 +254,10 @@ class SmardApi:
 
         Examples
         --------
-        import smardapi as smard
-        smard.specify(filter_no = 410, region = 'DE')
-        smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
-        smard.plot()
+            import smardapi as smard
+            smard.specify(filter_no = 410, region = 'DE')
+            smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
+            smard.plot()
         """
         if (self.data is None):
             print('No data found.')
@@ -290,10 +290,10 @@ class SmardApi:
 
         Examples
         --------
-        import smardapi as smard
-        smard.specify(filter_no = 410, region = 'DE')
-        smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
-        smard.save_csv(file = 'NewData.csv')
+            import smardapi as smard
+            smard.specify(filter_no = 410, region = 'DE')
+            smard.download(resolution = 'day', start = '2016-02-01', stop = '2018-11-11')
+            smard.save_csv(file = 'NewData.csv')
         """
         if (self.data is None):
             print('No data found.')
@@ -318,8 +318,8 @@ class SmardApi:
 
         Examples
         --------
-        import smardapi as smard
-        smard.allowed_filter_no()
+            import smardapi as smard
+            smard.allowed_filter_no()
         """
         print('Check https://smard.api.bund.dev/ for details')
         return {
@@ -377,8 +377,8 @@ class SmardApi:
 
         Examples
         --------
-        import smardapi as smard
-        smard.allowed_region()
+            import smardapi as smard
+            smard.allowed_region()
         """
         print('Check https://smard.api.bund.dev/ for details')
         return {
@@ -410,8 +410,8 @@ class SmardApi:
 
         Examples
         --------
-        import smardapi as smard
-        smard.allowed_resolution()
+            import smardapi as smard
+            smard.allowed_resolution()
         """
         print('Check https://smard.api.bund.dev/ for details')
         return {
