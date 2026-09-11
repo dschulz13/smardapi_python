@@ -111,11 +111,9 @@ def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop 
         region = region,
         resolution = resolution,
         timestamps = tstamps)
-    data_collection = []   # Initialize empty list
     if ~silent:
         print('Downloading data...')
-    for url in data_urls:   # For each URL, collect the data and append it to the list
-        data_collection.append(run_api(url)['series'])
+    data_collection = [run_api(url)['series'] for url in data_urls]
     if ~silent:
         print('Download successful!')
     df = pd.DataFrame({
