@@ -159,8 +159,8 @@ class SmardApi:
     --------
         SmardApi()
 
-    Returns:
-    --------
+    Returns
+    -------
     An object of class SmardApi.
     """
 
