@@ -121,7 +121,7 @@ def get_ts_data(filter_no, region, resolution, start = '2015-01-01 00:00', stop 
         'Value': [subsublist[1] for sublist in data_collection for subsublist in sublist]
         })
     df.drop_duplicates(subset = ['Timestamp'], ignore_index = True, inplace = True)
-    df = df.iloc[lambda x: (x['Timestamp'] >= datetime.fromisoformat(start).replace(tzinfo = ZoneInfo("Europe/Berlin"))) & (x['Timestamp'] <= datetime.fromisoformat(stop).replace(tzinfo = ZoneInfo("Europe/Berlin"))), :]
+    df = df.loc[lambda x: (x['Timestamp'] >= datetime.fromisoformat(start).replace(tzinfo = ZoneInfo("Europe/Berlin"))) & (x['Timestamp'] <= datetime.fromisoformat(stop).replace(tzinfo = ZoneInfo("Europe/Berlin"))), :]
     df = df.loc[df['Value'].first_valid_index():df['Value'].last_valid_index()].reset_index(drop = True)
     #df.set_index('Timestamp', inplace = True)
     if not silent:
