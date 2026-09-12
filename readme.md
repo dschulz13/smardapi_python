@@ -31,13 +31,8 @@ Afterwards, we are ready to download the data via `smard.download()`.
 
 
 ```python
-smard.download(resolution = "day", start = "2016-03-15", stop = "2023-05-11")
+smard.download(resolution = "day", start = "2016-03-15", stop = "2023-05-11", silent = True)
 ```
-
-    Downloading data...
-    Download successful!
-    There are no NaN values in the series!
-    
 
 `resolution` defines the observation frequency. Here, we pick daily. For an overview of the options, see `smard.allowed_resolution()`. Furthermore, `start` and `stop` are timestamps that align with the ISO8601 standard and they define the time window for which to download the data. For more granular data, like hourly data via `resolution = "hour"`, `start` and `stop` may also include times.
 
@@ -45,65 +40,24 @@ smard.download(resolution = "day", start = "2016-03-15", stop = "2023-05-11")
 
 
 ```python
-smard.data.head()
+print(smard.data)
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Timestamp</th>
-      <th>Value</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>2016-03-15 00:00:00+01:00</td>
-      <td>1538388.37</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>2016-03-16 00:00:00+01:00</td>
-      <td>1537748.85</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>2016-03-17 00:00:00+01:00</td>
-      <td>1504403.45</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>2016-03-18 00:00:00+01:00</td>
-      <td>1496937.83</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>2016-03-19 00:00:00+01:00</td>
-      <td>1293671.77</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
+                         Timestamp       Value
+    0    2016-03-15 00:00:00+01:00  1538388.37
+    1    2016-03-16 00:00:00+01:00  1537748.85
+    2    2016-03-17 00:00:00+01:00  1504403.45
+    3    2016-03-18 00:00:00+01:00  1496937.83
+    4    2016-03-19 00:00:00+01:00  1293671.77
+    ...                        ...         ...
+    2609 2023-05-07 00:00:00+02:00  1030433.50
+    2610 2023-05-08 00:00:00+02:00  1280216.25
+    2611 2023-05-09 00:00:00+02:00  1313296.75
+    2612 2023-05-10 00:00:00+02:00  1322452.75
+    2613 2023-05-11 00:00:00+02:00  1310945.00
+    
+    [2614 rows x 2 columns]
+    
 
 Now, we may wish to create a plot of the downloaded series.
 
