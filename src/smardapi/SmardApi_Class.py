@@ -222,10 +222,14 @@ class SmardApi:
                 The resolution of the time series, i.e. the time between
                 observations
             start : str
-                The starting time point following the ISO8601 format
+                The starting time point following the ISO8601 format; is
+                internally considered to be a timestamp from the timezone
+                Europe/Berlin
             stop : str
-                The stopping time point following the ISO8601 format;
-                the default None gets data until the last available time point
+                The stopping time point following the ISO8601 format; is
+                internally considered to be a timestamp from the timezone
+                Europe/Berlin; the default None gets data until the last
+                available time point
             silent : bool
                 A boolean indicating whether or not to suppress messages
                 from the download method to the console
