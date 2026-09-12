@@ -87,8 +87,8 @@ def construct_data_url(filter_no, region, resolution, timestamps):
 def filter_timestamps(timestamps, start = '2015-01-01 00:00', stop = None):
     # Timestamps in seconds since 1970-01-01
     timestamps_np = np.array(timestamps) / 1000
-    start_int = int(pd.to_datetime(start, format = 'ISO8601').timestamp())
-    stop_int = int(pd.to_datetime(stop, format = 'ISO8601').timestamp())
+    start_int = int(pd.to_datetime(start, format = 'ISO8601').replace(tzinfo = ZoneInfo("Europe/Berlin")).timestamp())
+    stop_int = int(pd.to_datetime(stop, format = 'ISO8601').replace(tzinfo = ZoneInfo("Europe/Berlin")).timestamp())
     start_idx = max(np.sum(start_int >= timestamps_np).item() - 1, 0)
     stop_idx = max(np.sum(stop_int >= timestamps_np).item(), 1)
     return timestamps[start_idx:stop_idx]
