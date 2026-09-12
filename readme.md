@@ -34,7 +34,7 @@ Afterwards, we are ready to download the data via `smard.download()`.
 smard.download(resolution = "day", start = "2016-03-15", stop = "2023-05-11", silent = True)
 ```
 
-`resolution` defines the observation frequency. Here, we pick daily. For an overview of the options, see `smard.allowed_resolution()`. Furthermore, `start` and `stop` are timestamps that align with the ISO8601 standard and they define the time window for which to download the data. For more granular data, like hourly data via `resolution = "hour"`, `start` and `stop` may also include times.
+`resolution` defines the observation frequency. Here, we pick daily. For an overview of the options, see `smard.allowed_resolution()`. Furthermore, `start` and `stop` are timestamps that align with the ISO8601 standard and they define the time window for which to download the data. For more granular data, like hourly data via `resolution = "hour"`, `start` and `stop` may also include times. Note that `start` and `stop` are internally interpreted as timestamps of the timezone Europe/Berlin.
 
 `smard.data` now contains a `pandas` data frame with the downloaded data.
 
